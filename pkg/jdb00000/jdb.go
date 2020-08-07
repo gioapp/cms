@@ -1,6 +1,6 @@
 // Package ipfslite is a lightweight IPFS peer which runs the minimal setup to
 // provide an `ipld.DAGService`, "Add" and "Get" UnixFS files from IPFS.
-package jdb
+package jdb00000
 
 import (
 	"context"

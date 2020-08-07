@@ -1,4 +1,4 @@
-package jdb
+package jdb00000
 
 import (
 	"context"
@@ -133,4 +133,5 @@ func newDHT(ctx context.Context, h host.Host, ds datastore.Batching) (*dualdht.D
 	}
 
 	return dualdht.New(ctx, h, dhtOpts...)
+
 }
