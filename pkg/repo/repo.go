@@ -12,8 +12,8 @@ import (
 	"path/filepath"
 	"sync"
 
-	"github.com/asabya/ipfs-lite/config"
 	"github.com/facebookgo/atomicfile"
+	"github.com/gioapp/cms/pkg/jdb/cfg"
 	lockfile "github.com/ipfs/go-fs-lock"
 	logger "github.com/ipfs/go-log/v2"
 	"github.com/mitchellh/go-homedir"

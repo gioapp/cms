@@ -5,7 +5,6 @@ go 1.14
 require (
 	gioui.org v0.0.0-20200726090339-83673ecb203f
 	github.com/alangpierce/go-forceexport v0.0.0-20160317203124-8f1d6941cd75 // indirect
-	github.com/asabya/ipfs-lite v0.0.0-20200729034014-b7912eecfa32 // indirect
 	github.com/facebookgo/atomicfile v0.0.0-20151019160806-2de1f203e7d5
 	github.com/gioapp/gel v0.0.0-20200719184500-af01009f3e0f
 	github.com/ipfs/go-bitswap v0.2.19
