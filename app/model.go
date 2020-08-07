@@ -6,8 +6,9 @@ import (
 	"gioui.org/layout"
 	"gioui.org/op"
 	"gioui.org/widget"
+	"github.com/gioapp/cms/pkg/items"
+	"github.com/gioapp/cms/pkg/jdb"
 	"github.com/gioapp/cms/pkg/theme"
-	shell "github.com/ipfs/go-ipfs-api"
 )
 
 type (
@@ -20,22 +21,14 @@ var (
 )
 
 type CMS struct {
-	sh          *shell.Shell
+	//sh          *shell.Shell
+	jdb         *jdb.JavazacDB
 	ctx         context.Context
 	UI          cmsUI
-	menuItems   []Item
+	MenuItems   []Item
 	Settings    gipfsSettings
-	ItemsList   []*folderListItem
+	ItemsList   []*items.FolderListItem
 	currentPage string
-}
-
-type folderListItem struct {
-	Name  string
-	Hash  string
-	Size  uint64
-	Type  uint8
-	btn   *widget.Clickable
-	check *widget.Bool
 }
 
 type cmsUI struct {
@@ -47,7 +40,7 @@ type cmsUI struct {
 	FontSize float32
 
 	mob    bool
-	pages  pages
+	Pages  pages
 	header func(gtx C) D
 	Images map[string]widget.Image
 	Ops    op.Ops

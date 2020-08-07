@@ -22,7 +22,7 @@ import (
 const Root = ".idrop"
 
 type Repo interface {
-	Config() (*config.Config, error)
+	Config() (*cfg.Config, error)
 	Path() string
 }
 
@@ -42,10 +42,10 @@ type FSRepo struct {
 	// lockfile is the file system lock to prevent others from opening
 	// the same fsrepo path concurrently
 	lockfile io.Closer
-	config   *config.Config
+	config   *cfg.Config
 }
 
-func (r *FSRepo) Config() (*config.Config, error) {
+func (r *FSRepo) Config() (*cfg.Config, error) {
 	// It is not necessary to hold the package lock since the repo is in an
 	// opened state. The package lock is _not_ meant to ensure that the repo is
 	// thread-safe. The package lock is only meant to guard against removal and
@@ -64,7 +64,7 @@ func (r *FSRepo) Path() string {
 	return r.path
 }
 
-func Init(repoPath string, conf *config.Config) error {
+func Init(repoPath string, conf *cfg.Config) error {
 	// packageLock must be held to ensure that the repo is not initialized more
 	// than once.
 	packageLock.Lock()
@@ -130,15 +130,15 @@ func newFSRepo(rpath string) (*FSRepo, error) {
 	return &FSRepo{path: expPath}, nil
 }
 
-func initConfig(path string, cfg *config.Config) error {
-	configFilename, err := config.Filename(path)
+func initConfig(path string, c *cfg.Config) error {
+	configFilename, err := cfg.Filename(path)
 	if err != nil {
-		log.Error(err.Error())
+		//log.Error(err.Error())
 		return err
 	}
 	err = os.MkdirAll(filepath.Dir(configFilename), 0775)
 	if err != nil {
-		log.Error(err.Error())
+		//log.Error(err.Error())
 		return err
 	}
 
@@ -148,13 +148,13 @@ func initConfig(path string, cfg *config.Config) error {
 	}
 	defer f.Close()
 
-	return encode(f, cfg)
+	return encode(f, c)
 }
 
 // encode configuration with JSON
 func encode(w io.Writer, value interface{}) error {
 	// need to prettyprint, hence MarshalIndent, instead of Encoder
-	buf, err := config.Marshal(value)
+	buf, err := cfg.Marshal(value)
 	if err != nil {
 		return err
 	}
@@ -164,11 +164,11 @@ func encode(w io.Writer, value interface{}) error {
 
 // openConfig returns an error if the config file is not present.
 func (r *FSRepo) openConfig() error {
-	configFilename, err := config.Filename(r.path)
+	configFilename, err := cfg.Filename(r.path)
 	if err != nil {
 		return err
 	}
-	conf := config.Config{}
+	conf := cfg.Config{}
 	f, err := os.Open(configFilename)
 	if err != nil {
 		return err
@@ -184,7 +184,7 @@ func (r *FSRepo) openConfig() error {
 // configIsInitialized returns true if the repo is initialized at
 // provided |path|.
 func configIsInitialized(path string) bool {
-	configFilename, err := config.Filename(path)
+	configFilename, err := cfg.Filename(path)
 	if err != nil {
 		return false
 	}

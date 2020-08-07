@@ -1,4 +1,4 @@
-package main
+package exampleApp
 
 import (
 	"fmt"
@@ -7,6 +7,7 @@ import (
 	"gioui.org/op/paint"
 	"gioui.org/widget"
 	"github.com/gioapp/cms/app"
+	"github.com/gioapp/cms/pkg/items"
 	"github.com/gioapp/cms/pkg/theme"
 	"image"
 	"image/png"
@@ -55,7 +56,7 @@ var (
 	browseBtn  = new(widget.Clickable)
 )
 
-func pages(th *theme.Theme, status *Status, live *statLive) map[string]cms.Page {
+func Pages(th *theme.Theme, itms items.I) map[string]cms.Page {
 	return map[string]cms.Page{
 		//"Welcome": cms.Page{
 		//	Title:  "Welcome",
@@ -64,8 +65,8 @@ func pages(th *theme.Theme, status *Status, live *statLive) map[string]cms.Page 
 		//},
 		"Status": cms.Page{
 			Title:  "Status",
-			Header: statusHeader(th, status),
-			Body:   statusBody(th, live),
+			Header: statusHeader(th, &Status{}),
+			Body:   statusBody(th, itms),
 		},
 		//"Files": cms.Page{
 		//	Title:  "Files",
@@ -90,7 +91,7 @@ func pages(th *theme.Theme, status *Status, live *statLive) map[string]cms.Page 
 	}
 }
 
-func menuItems() []cms.Item {
+func MenuItems() []cms.Item {
 	return []cms.Item{
 		cms.Item{
 			Title: "Status",

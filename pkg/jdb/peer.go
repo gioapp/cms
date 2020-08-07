@@ -159,19 +159,14 @@ func (p *Peer) setupDAGService() error {
 
 func (p *Peer) setupReprovider() error {
 	queue, err := queue.NewQueue(p.Ctx, "repro", p.Store)
-	if err != nil {
-		return err
-	}
-
+	checkError(err)
 	prov := simple.NewProvider(
 		p.Ctx,
 		queue,
 		p.DHT,
 	)
 	cfg, err := p.Repo.Config()
-	if err != nil {
-		return err
-	}
+	checkError(err)
 	reprov := simple.NewReprovider(
 		p.Ctx,
 		cfg.ReprovideInterval,
@@ -287,14 +282,9 @@ func (p *Peer) AddFile(ctx context.Context, r io.Reader, params *AddParams) (ipl
 	}
 
 	chnk, err := chunker.FromString(r, params.Chunker)
-	if err != nil {
-		return nil, err
-	}
+	checkError(err)
 	dbh, err := dbp.New(chnk)
-	if err != nil {
-		return nil, err
-	}
-
+	checkError(err)
 	var n ipld.Node
 	switch params.Layout {
 	case "trickle":

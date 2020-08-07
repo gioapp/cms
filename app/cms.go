@@ -11,7 +11,7 @@ func (g *CMS) AppMain() {
 			n := Navigation{
 				Name:  "Navigacion",
 				Bg:    g.UI.Theme.Colors["NavBg"],
-				Items: g.menuItems,
+				Items: g.MenuItems,
 			}
 			width := 252
 			if g.UI.mob {
@@ -22,7 +22,7 @@ func (g *CMS) AppMain() {
 		func(gtx C) D {
 			return lyt.Format(gtx, "vflexb(start,f(1,_))",
 				//g.UI.Header,
-				g.page(g.UI.pages[g.currentPage]))
+				g.page(g.UI.Pages[g.currentPage]))
 			//func(gtx C) D {
 			//	return theme.H3(g.UI.Theme, "dfdffdf").Layout(gtx)
 			//})

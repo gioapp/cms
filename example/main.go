@@ -9,6 +9,7 @@ import (
 	"github.com/gioapp/cms/app"
 	"github.com/gioapp/cms/cfg"
 	in "github.com/gioapp/cms/cfg/ini"
+	exampleApp "github.com/gioapp/cms/example/app"
 	"github.com/gioapp/cms/pkg/theme"
 	"log"
 	"os"
@@ -18,8 +19,11 @@ import (
 func main() {
 	th := theme.NewTheme()
 
-	g := cms.NewCMS(th, pages(th, status, liveStatus), menuItems(), header(*th))
+	g := cms.NewCMS(th, exampleApp.Header(*th))
 
+	g.UI.Pages = exampleApp.Pages(th, g.ItemsList)
+
+	g.MenuItems = exampleApp.MenuItems()
 	//g.UI.Header =
 	if cfg.Initial {
 		fmt.Println("running initial sync")

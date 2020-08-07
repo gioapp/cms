@@ -1,4 +1,4 @@
-package main
+package exampleApp
 
 import (
 	"gioui.org/layout"
@@ -11,7 +11,7 @@ import (
 	"github.com/w-ingsolutions/c/pkg/lyt"
 )
 
-func header(th theme.Theme) func(gtx C) D {
+func Header(th theme.Theme) func(gtx C) D {
 	return container.ContainerLayout(th.Colors["Info"], 0, 0, 0, 0, func(gtx C) D {
 		gtx.Constraints.Min.X = gtx.Constraints.Max.X
 		return lyt.Format(gtx, "hflexb(middle,r(inset(0dp0dp0dp6dp,_)),r(inset(20dp30dp20dp3dp,_)))",

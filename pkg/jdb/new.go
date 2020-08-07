@@ -2,60 +2,67 @@ package jdb
 
 import (
 	"context"
-	"fmt"
+	"gioui.org/widget"
+	"github.com/gioapp/cms/pkg/items"
 	"github.com/gioapp/cms/pkg/jdb/cfg"
 	"github.com/gioapp/cms/pkg/jdb/repo"
 	"github.com/ipfs/go-cid"
-	crypto "github.com/libp2p/go-libp2p-core/crypto"
 	"os"
 )
 
 // JavazacDb Structure
 type JavazacDB struct {
-	ctx       context.Context
-	peer      *Peer
-	index     map[string]string
-	Datastore string
+	ctx   context.Context
+	peer  *Peer
+	index map[string]string
+	store string
 }
 
-func New(datastore string) *JavazacDB {
-	ctx, cancel := context.WithCancel(context.Background())
-	defer cancel()
-
-	root := "/tmp" + string(os.PathSeparator) + repo.Root
+func New(ctx context.Context, store string) *JavazacDB {
+	j := &JavazacDB{
+		ctx:   ctx,
+		index: make(map[string]string),
+		store: store,
+	}
+	//ctx, cancel := context.WithCancel(context.Background())
+	//defer cancel()
+	//c, _ := cid.Decode(hash)
+	//j.cid = c
+	root := j.store + string(os.PathSeparator) + repo.Root
 	conf, err := cfg.ConfigInit(2048)
-	if err != nil {
-		return
-	}
+	checkError(err)
 	err = repo.Init(root, conf)
-	if err != nil {
-		return
-	}
+	checkError(err)
 
 	r, err := repo.Open(root)
-	if err != nil {
-		return
+	checkError(err)
+	peer, err := NewPeer(j.ctx, r)
+	checkError(err)
+	peer.Bootstrap(DefaultBootstrapPeers())
+	j.peer = peer
+	return j
+}
+
+func (j *JavazacDB) ReadList(hash string) (itms items.I) {
+	c, _ := cid.Decode(hash)
+	rsc, err := j.peer.Get(j.ctx, c)
+	checkError(err)
+	for _, item := range rsc.Links() {
+		//pss, err := rsc.Stat()
+		//checkError(err)
+		//nonono, err := item.GetNode(j.ctx, j.peer)
+		//checkError(err)
+		//nns, err := nonono.Stat()
+		//checkError(err)
+
+		itms = append(itms, &items.FolderListItem{
+			Name: item.Name,
+			Cid:  item.Cid,
+			Size: item.Size,
+			//Type:  uint8,
+			Btn:   new(widget.Clickable),
+			Check: new(widget.Bool),
+		})
 	}
-
-	lite, err := NewPeer(ctx, r)
-	if err != nil {
-		panic(err)
-	}
-
-	lite.Bootstrap(DefaultBootstrapPeers())
-
-	c, _ := cid.Decode("QmSv66pvzJfjwLHuQCYhd3cekGWNX6Q2o5Y268SNMw8fd8")
-	rsc, err := lite.Get(ctx, c)
-	if err != nil {
-		panic(err)
-	}
-	//lite.
-	fmt.Println("Reeeeee", rsc.Tree("", 0))
-	//defer rsc.Close()
-	//content, err := ioutil.ReadAll(rsc)
-	//if err != nil {
-	//	panic(err)
-	//}
-
-	//fmt.Println(string(content))
+	return
 }

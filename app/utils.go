@@ -12,3 +12,7 @@ func (g *CMS) twoPanels(l, r int, left, right func(gtx C) D) func(gtx C) D {
 			container.ContainerLayout(g.UI.Theme.Colors["PanelBg"], r, r, r, r, right))
 	}
 }
+
+//func (g *CMS) GetItems() func(gtx C) D {
+//	return items.ItemsList(g.jdb, g.UI.Theme, g.ItemsList)
+//}

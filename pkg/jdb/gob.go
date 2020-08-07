@@ -1,4 +1,4 @@
-package jdb00000
+package jdb
 
 import (
 	"bytes"
@@ -28,14 +28,13 @@ func (j *JavazacDB) Write(collection string, key []byte) {
 	fmt.Println("cii:", index.Cid())
 }
 
-func (j *JavazacDB) Read(fileName string) {
+func (j *JavazacDB) Read(fileName string, key interface{}) {
 	c, _ := cid.Decode(fileName)
 	rsc, err := j.peer.GetFile(j.ctx, c)
-	if err != nil {
-		panic(err)
-	}
-	//decoder := gob.NewDecoder(rsc)
-	//err = decoder.Decode(key)
+	checkError(err)
+
+	decoder := gob.NewDecoder(rsc)
+	err = decoder.Decode(key)
 	fmt.Println("DroljaIZKnjazevca", rsc)
 	checkError(err)
 	defer rsc.Close()
